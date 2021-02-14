@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 const tpl = `
@@ -13,7 +14,7 @@ const tpl = `
 	Some:       %v
 `
 
-func reflectForm(w http.ResponseWriter, r *http.Request) {
+func serveForm(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	fmt.Fprintf(w, fmt.Sprintf(tpl, 
 		r.RequestURI, 
@@ -23,7 +24,14 @@ func reflectForm(w http.ResponseWriter, r *http.Request) {
 	))
 }
 
+// sends files to the browser
+func serveFile(w http.ResponseWriter, r *http.Request) {
+	ldir := 
+	http.ServeFile(w, r, ldir + r.URL.Path)
+}
+
 func main() {
-	http.HandleFunc("/", reflectForm)
+	http.HandleFunc("/form", serveForm)
+	http.HandleFunc("/", serveFile)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
