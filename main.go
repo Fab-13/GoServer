@@ -26,6 +26,10 @@ func serveForm(w http.ResponseWriter, r *http.Request) {
 
 // sends files to the browser
 func serveFile(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "post" {
+		serveForm(w, r)
+		return 
+	}
 	var err error
 	wd, err := os.Getwd()
 	if err != nil {
