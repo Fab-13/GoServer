@@ -1,32 +1,22 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 )
 
-const tpl = `
-	RequestURI: %v
-	Host:       %v
-	Form:       %v
-	Some:       %v
-`
-
 func serveForm(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	fmt.Fprintf(w, fmt.Sprintf(tpl, 
-		r.RequestURI, 
-		r.Host, 
-		r.Form,
-		r.Form.Get("Some"),
-	))
+	json, _ := json.MarshalIndent(r.Form, "", "  ")
+	fmt.Fprintf(w, string(json))
 }
 
 // sends files to the browser
-func serveFile(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "post" {
+func serve(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
 		serveForm(w, r)
 		return 
 	}
@@ -40,7 +30,6 @@ func serveFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/form", serveForm)
-	http.HandleFunc("/", serveFile)
+	http.HandleFunc("/", serve)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
