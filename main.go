@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 )
 
@@ -26,8 +27,13 @@ func serveForm(w http.ResponseWriter, r *http.Request) {
 
 // sends files to the browser
 func serveFile(w http.ResponseWriter, r *http.Request) {
-	ldir := 
-	http.ServeFile(w, r, ldir + r.URL.Path)
+	var err error
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Print(err)
+		return
+	}
+	http.ServeFile(w, r, filepath.Join(wd, r.URL.Path))
 }
 
 func main() {
