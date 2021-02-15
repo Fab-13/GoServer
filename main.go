@@ -18,7 +18,7 @@ func serveForm(w http.ResponseWriter, r *http.Request) {
 func serve(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		serveForm(w, r)
-		return 
+		return
 	}
 	var err error
 	wd, err := os.Getwd()
