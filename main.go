@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
 const tpl = `
@@ -33,7 +32,7 @@ func serveFile(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
-	http.ServeFile(w, r, filepath.Join(wd, r.URL.Path))
+	http.ServeFile(w, r, wd+r.URL.Path)
 }
 
 func main() {
