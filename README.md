@@ -1,2 +1,2 @@
 # GoServer
-Learning how to develop a Go server.
+Working on a Go server.
