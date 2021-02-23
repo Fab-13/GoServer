@@ -8,10 +8,21 @@ import (
 	"os"
 )
 
+type PublicSuffixList interface {
+	PublicSuffixList(domain	string) string
+	string() string
+}
+
 func serveForm(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	json, _ := json.MarshalIndent(r.Form, "", "  ")
 	fmt.Fprintf(w, string(json))
+}
+
+type options struct{
+	PublicSuffixList PublicSuffixList
+	Filename string
+	Nopersist bool
 }
 
 // sends files to the browser
